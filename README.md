@@ -1,10 +1,10 @@
 # vite-plus-official-tanstack
 
-A minimal TanStack Start app with one route and plain CSS.
+A minimal TanStack Start app with home and about routes and plain CSS.
 
 ```bash
-pnpm install
-pnpm dev
+vp install
+vp dev
 ```
 
 Edit `src/routes/index.tsx` to get started. Add route files under
@@ -13,5 +13,11 @@ Edit `src/routes/index.tsx` to get started. Add route files under
 Build the production app with:
 
 ```bash
-pnpm build
+vp run build
 ```
+
+Run unit/component tests with `vp test`, or watch with `vp test watch`.
+Run `vp run test:coverage` to enforce 100% statements, branches, functions and
+lines across authored application source. Future changes must preserve all four
+thresholds. See [test conventions and coverage scope](docs/testing.md),
+[lint policy](docs/lint-policy.md) and [setup](docs/setup.md).

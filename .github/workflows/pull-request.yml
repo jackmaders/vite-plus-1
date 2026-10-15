@@ -51,17 +51,44 @@ jobs:
       - name: Verify generated route tree
         run: git diff --exit-code -- src/routeTree.gen.ts
 
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Vite+
+        uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
+        with:
+          version-file: pnpm-workspace.yaml
+          run-install: true
+          cache: true
+      - name: Run unit tests with coverage
+        run: vp run test:coverage
+      - name: Upload coverage report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: unit-test-coverage
+          path: coverage/
+          if-no-files-found: error
+
   status:
     name: ✅ Status Checks
     if: ${{ always() }}
-    needs: [quality, build]
+    needs: [quality, build, unit]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Verify required jobs
         env:
           QUALITY_RESULT: ${{ needs.quality.result }}
+          UNIT_RESULT: ${{ needs.unit.result }}
           BUILD_RESULT: ${{ needs.build.result }}
         run: |
           test "$QUALITY_RESULT" = success
           test "$BUILD_RESULT" = success
+          test "$UNIT_RESULT" = success

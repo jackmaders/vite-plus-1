@@ -57,3 +57,20 @@ For AI reviews, add a Gemini API key as a repository secret:
 ```bash
 gh secret set GEMINI_API_KEY
 ```
+
+## Local validation
+
+```bash
+vp check
+vp test
+vp test watch
+vp run test:coverage
+vp run build
+```
+
+Use watch mode while editing; the coverage task always runs once without task
+caching. Keep statements, branches, functions and lines at 100% for every future
+change. CI runs coverage in `Unit Tests` and uploads `unit-test-coverage`; the
+existing required `✅ Status Checks` gates this job along with quality/build.
+See [testing conventions and coverage exclusions](testing.md) and
+[lint plugin coverage and exceptions](lint-policy.md).

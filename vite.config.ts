@@ -1,8 +1,11 @@
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import process from "node:process";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
 const GENERATED_FILES = ["src/routeTree.gen.ts"];
+
+const TEST_FILES = ["src/**/__tests__/**/*.spec.{ts,tsx}"];
 
 export default defineConfig({
   fmt: { ignorePatterns: GENERATED_FILES },
@@ -19,6 +22,7 @@ export default defineConfig({
     env: { browser: true, node: false },
     ignorePatterns: GENERATED_FILES,
     jsPlugins: [
+      { name: "testing-library", specifier: "eslint-plugin-testing-library" },
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
       { name: "no-unsanitized", specifier: "eslint-plugin-no-unsanitized" },
       { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
@@ -30,13 +34,55 @@ export default defineConfig({
       typeCheck: true,
     },
     overrides: [
+      { files: [...TEST_FILES, "src/testing/**"], rules: { "oxc/no-async-await": "off" } },
+      { files: ["src/testing/setup.ts"], rules: { "import/no-namespace": "off" } },
+      {
+        files: TEST_FILES,
+        plugins: ["vitest"],
+        rules: {
+          "testing-library/await-async-events": "error",
+          "testing-library/await-async-queries": "error",
+          "testing-library/await-async-utils": "error",
+          "testing-library/consistent-data-testid": "error",
+          "testing-library/no-await-sync-events": "error",
+          "testing-library/no-await-sync-queries": "error",
+          "testing-library/no-container": "error",
+          "testing-library/no-debugging-utils": "error",
+          "testing-library/no-dom-import": "error",
+          "testing-library/no-global-regexp-flag-in-query": "error",
+          "testing-library/no-manual-cleanup": "error",
+          "testing-library/no-node-access": "error",
+          "testing-library/no-promise-in-fire-event": "error",
+          "testing-library/no-render-in-lifecycle": "error",
+          "testing-library/no-test-id-queries": "error",
+          "testing-library/no-unnecessary-act": "error",
+          "testing-library/no-wait-for-multiple-assertions": "error",
+          "testing-library/no-wait-for-side-effects": "error",
+          "testing-library/no-wait-for-snapshot": "error",
+          "testing-library/prefer-explicit-assert": "error",
+          "testing-library/prefer-find-by": "error",
+          "testing-library/prefer-implicit-assert": "off",
+          "testing-library/prefer-presence-queries": "error",
+          "testing-library/prefer-query-by-disappearance": "error",
+          "testing-library/prefer-query-matchers": "error",
+          "testing-library/prefer-screen-queries": "error",
+          "testing-library/prefer-user-event": "error",
+          "testing-library/prefer-user-event-setup": "error",
+          "testing-library/render-result-naming-convention": "error",
+          "vitest/consistent-test-filename": ["error", { pattern: ".*\\.spec\\.[tj]sx?$" }],
+          "vitest/no-importing-vitest-globals": "off",
+          "vitest/prefer-expect-assertions": "off",
+          "vitest/prefer-importing-vitest-globals": "off",
+          "vitest/require-test-timeout": "off",
+        },
+      },
       {
         env: { browser: false, node: true },
         files: ["**/*.config.ts"],
       },
       {
         files: ["**/*.config.ts"],
-        rules: { "import/no-default-export": "off" },
+        rules: { "import/no-default-export": "off", "import/no-nodejs-modules": "off" },
       },
       {
         files: ["src/routes/**/*.tsx"],
@@ -84,9 +130,29 @@ export default defineConfig({
       react: { linkComponents: [{ attribute: "to", name: "Link" }] },
     },
   },
-  plugins: lazyPlugins(() => [tanstackStart(), viteReact()]) ?? [],
+  plugins:
+    lazyPlugins(() => {
+      if (process.env["VITEST"] === "true") {
+        return [viteReact()];
+      }
+      return [tanstackStart({ router: { routeFileIgnorePattern: "__tests__" } }), viteReact()];
+    }) ?? [],
   resolve: { tsconfigPaths: true },
+  run: { tasks: { "test:coverage": { cache: false, command: "vp test run --coverage" } } },
   staged: {
     "*": "vp check --fix",
+  },
+  test: {
+    coverage: {
+      exclude: [...GENERATED_FILES, "**/*.d.ts", "**/__tests__/**", "src/testing/**"],
+      include: ["src/**/*.{ts,tsx,js,jsx}"],
+      provider: "v8",
+      reporter: ["text", "html", "lcov", "json-summary"],
+      thresholds: { branches: 100, functions: 100, lines: 100, statements: 100 },
+    },
+    environment: "happy-dom",
+    include: TEST_FILES,
+    restoreMocks: true,
+    setupFiles: ["./src/testing/setup.ts"],
   },
 });
