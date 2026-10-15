@@ -22,6 +22,11 @@
       "name": "pnpm",
       "version": "12.11.2",
       "onFail": "download"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "24.22.0",
+      "onFail": "download"
     }
   }
 }
