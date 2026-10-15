@@ -21,20 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
-    env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
     steps:
-      - name: Check advisory review availability
-        id: availability
-        shell: bash
-        run: |
-          if [ -n "$GEMINI_API_KEY" ]; then
-            echo "enabled=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "AI review skipped: GEMINI_API_KEY is not configured." >> "$GITHUB_STEP_SUMMARY"
-          fi
       - name: 🔎 Agent Code Review
-        if: steps.availability.outputs.enabled == 'true'
         # No checkout: the privileged action reads the diff through the API only.
         uses: The-PR-Agent/pr-agent@8e5a9295973b24af4b70cafd0b660a230811ef9e # v0.47.0
         env:
@@ -43,7 +31,6 @@ jobs:
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           config.model: gemini/gemini-3.8-flash
           config.max_model_tokens: 64000
-          config.fallback_models: '["gemini/gemini-3.5-flash-lite"]'
           pr_reviewer.require_merge_recommendation: "true"
           pr_reviewer.inline_key_issues: "true"
           pr_reviewer.require_can_be_split_review: "true"

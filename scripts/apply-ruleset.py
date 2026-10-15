@@ -1,4 +1,4 @@
-"""Apply governance after PR Checks succeeds; requires Python 3 and authenticated gh."""
+"""Apply governance after Code Quality and Build succeed; requires Python 3 and authenticated gh."""
 
 import json
 from pathlib import Path

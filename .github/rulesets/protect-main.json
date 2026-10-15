@@ -33,7 +33,11 @@
       "parameters": {
         "required_status_checks": [
           {
-            "context": "PR Checks",
+            "context": "Code Quality",
+            "integration_id": 15368
+          },
+          {
+            "context": "Build",
             "integration_id": 15368
           }
         ],
