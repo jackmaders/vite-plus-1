@@ -54,3 +54,76 @@ categories from the selected native plugins, including the counterparts below.
 Compiler checks and type-aware unsafe-value rules add coverage beyond Biome's
 syntax checks. Some similarly named checks differ on default options and edge cases;
 category names are not evidence of one-to-one compatibility.
+
+## 2. Native rule baseline and exceptions
+
+All seven categories (`correctness`, `suspicious`, `pedantic`, `perf`, `style`,
+`restriction`, `nursery`) are errors. `all` alone would omit nursery. Plugins are
+explicitly TypeScript, Unicorn, Oxc, imports, promises, JSDoc, and Node, alongside
+the existing Vite+ JavaScript import plugin. Categories apply to selected native
+plugins only. React, accessibility, and Vitest await those technologies.
+
+Browser globals apply to application code; configuration and TypeScript scripts
+use Node globals instead. Node/import restrictions remain enabled; add any
+necessary Node-module or process-environment exceptions narrowly when such code
+exists. Environment globals do not add React, Cloudflare, or Node ambient types to
+the compiler. `denyWarnings: true` rejects warnings and
+`reportUnusedDisableDirectives: "error"` rejects obsolete suppressions.
+
+Every disabled rule has a nearby configuration comment. The full exception list:
+
+| Setting                                           | Scope            | Reason                                                               |
+| ------------------------------------------------- | ---------------- | -------------------------------------------------------------------- |
+| `import/no-named-export: off`                     | Global           | Contradicts reference named exports                                  |
+| `import/prefer-default-export: off`               | Global           | Contradicts named exports for single-export modules                  |
+| `import/exports-last: off`                        | Global           | Reference explicitly permits exports alongside declarations          |
+| `typescript/explicit-function-return-type: off`   | Global           | Reference disables mandatory return types                            |
+| `typescript/explicit-module-boundary-types: off`  | Global           | Preserve inferred exported return types                              |
+| `no-ternary: off`                                 | Global           | Reference explicitly permits ternaries                               |
+| `sort-imports: off`                               | Global           | Oxfmt owns sorting; ESLint alphabetic declaration ordering conflicts |
+| `import/no-default-export: off`                   | `**/*.config.ts` | Framework config default export, matching reference                  |
+| `typescript/prefer-readonly-parameter-types: off` | `src/counter.ts` | HTML button is a mutable DOM object; counter updates its text        |
+
+Configured restrictions (not disabled rules): `func-style` requires declarations;
+arrow callbacks remain valid. `one-var: never` keeps declarations separate across
+DOM rendering and initialization. `import/no-unassigned-import` permits only CSS
+patterns, keeping JavaScript side-effect imports restricted. `sort-keys` and other
+nonconflicting style restrictions remain active; configuration keys were sorted.
+The counter uses named numeric constants and `textContent`; required DOM elements
+are checked before use instead of using non-null assertions.
+
+Reference conventions not yet applicable (React Native/Solid exclusions, JSX
+literals/binds/props, generated route files, mock naming, component-library CSS,
+and test-only magic numbers) are not speculative global exceptions here. Introduce
+scoped settings when those files and technologies arrive.
+
+## Unsupported or deferred policy
+
+Oxlint's categories are not Biome's category inventory. JSX accessibility and React
+checks are deferred to React adoption. CSS syntax/semantic rules, Tailwind directive
+validation, arbitrary-value restrictions, duplicate-selector and layering checks
+are unsupported by this native JS/TS lint setup. Oxfmt formats styles but does not
+replace those checks. Biome assists are not lint rules; Oxfmt handles formatting
+and import ordering, but does not promise every Biome assist transformation.
+
+No exact native equivalent is established here for every Biome naming convention,
+all secret detection heuristics (the reference disables `noSecrets`), or all enum
+restrictions. The original six Grit checks are reviewed separately, with no custom
+ports introduced. Framework and architecture checks require the corresponding
+application/test layout before meaningful configuration.
+
+## Verification
+
+Validated with local Vite+ 1.2.0, Oxlint 1.88.0, oxlint-tsgolint 7.0.2004,
+Oxfmt 0.73.0 and Vitest 5.0.4. Run `vp check` and `vp run build` (the build script
+runs `tsc` then the production Vite build). `vp test --passWithNoTests` verifies the
+runner; no test infrastructure exists yet. Existing required PR checks are unchanged.
+
+Temporary files were created, linted using `vp lint`, then removed. Negative probes
+confirmed rejection of source default exports, explicit `any`, non-null assertions,
+JavaScript side-effect imports, unused suppression directives, arrow function
+variables, floating promises, browser globals in config files, explicit undefined
+for optional properties, and unchecked indexed access. A warning-level debugger
+probe still failed through `denyWarnings`. Positive probes confirmed a named
+function with inferred return type, CSS side-effect imports, and a named configuration
+value exported as default. Anonymous default object exports remain restricted.
