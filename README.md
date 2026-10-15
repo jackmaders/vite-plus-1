@@ -19,5 +19,4 @@ vp run build
 Run unit/component tests with `vp test`, or watch with `vp test watch`.
 Run `vp run test:coverage` to enforce 100% statements, branches, functions and
 lines across authored application source. Future changes must preserve all four
-thresholds. See [test conventions and coverage scope](docs/testing.md),
-[lint policy](docs/lint-policy.md) and [setup](docs/setup.md).
+thresholds. See [setup](docs/setup.md) for conventions and coverage scope.

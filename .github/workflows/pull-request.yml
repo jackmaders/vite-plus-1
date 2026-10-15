@@ -52,7 +52,7 @@ jobs:
         run: git diff --exit-code -- src/routeTree.gen.ts
 
   unit:
-    name: Unit Tests
+    name: 🧪 Unit Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

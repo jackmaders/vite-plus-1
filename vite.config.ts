@@ -35,7 +35,7 @@ export default defineConfig({
     },
     overrides: [
       { files: [...TEST_FILES, "src/testing/**"], rules: { "oxc/no-async-await": "off" } },
-      { files: ["src/testing/setup.ts"], rules: { "import/no-namespace": "off" } },
+      { files: ["tests/vitest/setup.ts"], rules: { "import/no-namespace": "off" } },
       {
         files: TEST_FILES,
         plugins: ["vitest"],
@@ -153,6 +153,6 @@ export default defineConfig({
     environment: "happy-dom",
     include: TEST_FILES,
     restoreMocks: true,
-    setupFiles: ["./src/testing/setup.ts"],
+    setupFiles: ["./tests/vitest/setup.ts"],
   },
 });
