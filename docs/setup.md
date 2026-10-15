@@ -26,7 +26,7 @@ export GH_REPO="${GH_OWNER}/your-project-name"
 
 git add .
 git commit -m "chore: initialize project"
-gh repo create "$GH_REPO" --private --source=. --remote=origin --push
+gh repo create "$GH_REPO" --public --source=. --remote=origin --push
 gh repo edit --default-branch main \
   --delete-branch-on-merge --enable-squash-merge \
   --enable-merge-commit=false --enable-rebase-merge=false
