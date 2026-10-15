@@ -50,7 +50,8 @@ export default defineConfig({
           // Routes register their components above the function bodies, as in the official scaffold.
           "no-use-before-define": ["error", { functions: false }],
           // Normally restrict exports to components for Fast Refresh.
-          // TanStack routes require a Route object and private components; allowExportNames still rejects that pattern in Oxlint 1.88.
+          // Routes require a Route export; scaffold components stay private.
+          // Oxlint 1.88 still rejects those private components with allowExportNames.
           "react/only-export-components": "off",
         },
       },
