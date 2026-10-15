@@ -9,27 +9,25 @@
     "paths": { "@/*": ["./src/*"] },
     "skipLibCheck": true,
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* Strictness */
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedSideEffectImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
 
-    /* TypeScript also catches unused private members beyond Oxlint's bindings. */
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
 
-    /* Syntax and control flow */
     "erasableSyntaxOnly": true,
-    /* Unlike Oxlint's default, reject annotated switch fallthrough too. */
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "*.config.ts", "scripts/**/*.ts"]
