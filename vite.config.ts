@@ -2,10 +2,10 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
-// oxlint-disable-next-line import/no-default-export -- Vite configuration requires a default export.
+// TanStack owns generated code; share its exclusions between formatting and linting.
+const generatedFiles = ["src/routeTree.gen.ts"];
 export default defineConfig({
-  // TanStack owns the generated route tree formatting; builds verify its contents.
-  fmt: { ignorePatterns: ["src/routeTree.gen.ts"] },
+  fmt: { ignorePatterns: generatedFiles },
   lint: {
     // Enable every native rule category at error severity; exceptions are listed below.
     categories: {
@@ -19,13 +19,12 @@ export default defineConfig({
     },
     // Application code may use browser APIs; Node globals belong to tooling overrides.
     env: { browser: true, node: false },
-    // Generated assertions and naming are framework-owned, not application lint policy.
-    ignorePatterns: ["src/routeTree.gen.ts"],
+    ignorePatterns: generatedFiles,
     // Load checks missing from native Oxlint; each JavaScript rule is enabled explicitly below.
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
-      "eslint-plugin-no-unsanitized",
-      "@tanstack/eslint-plugin-router",
+      { name: "no-unsanitized", specifier: "eslint-plugin-no-unsanitized" },
+      { name: "@tanstack/router", specifier: "@tanstack/eslint-plugin-router" },
     ],
     options: {
       // Fail validation on warnings too, including warnings emitted by JavaScript plugins.
@@ -42,6 +41,14 @@ export default defineConfig({
         // Config and script modules run in Node; reject accidental browser-global use here.
         env: { browser: false, node: true },
         files: ["**/*.config.ts", "scripts/**/*.ts"],
+      },
+      {
+        files: ["**/*.config.ts"],
+        rules: {
+          // Allow the default exports expected by tool configuration APIs.
+          // Scope this convention to config files, including future configs, rather than scripts.
+          "import/no-default-export": "off",
+        },
       },
       {
         files: ["src/routes/**/*.tsx"],
