@@ -1,6 +1,7 @@
-import { HeadContent, Link, Scripts, createRootRoute } from "@tanstack/react-router";
+import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 
 import type { ReactNode } from "react";
+import { Navigation } from "@/components/navigation";
 import appCss from "@/styles.css?url";
 
 export const Route = createRootRoute({
@@ -35,14 +36,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
-        <header>
-          <nav aria-label="Main navigation">
-            {/* oxlint-disable-next-line react/jsx-max-depth -- Document navigation nests inside html and body. */}
-            <Link to="/">Home</Link>
-            {/* oxlint-disable-next-line react/jsx-max-depth -- Document navigation nests inside html and body. */}
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
+        <Navigation />
         {children}
 
         <Scripts />
