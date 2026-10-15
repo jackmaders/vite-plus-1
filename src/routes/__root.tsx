@@ -13,7 +13,6 @@ export const Route = createRootRoute({
     ],
     meta: [
       {
-        // oxlint-disable-next-line unicorn/text-encoding-identifier-case -- HTML charset metadata uses the official template's UTF-8 label, not a Node encoding identifier.
         charSet: "utf-8",
       },
       {
@@ -28,7 +27,6 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
-// oxlint-disable-next-line typescript/prefer-readonly-parameter-types -- ReactNode includes framework-owned mutable element/iterable types; props are readonly.
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">

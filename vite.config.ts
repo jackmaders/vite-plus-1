@@ -54,6 +54,13 @@ export default defineConfig({
         rules: {
           // The document shell owns html/body/navigation and needs four JSX levels.
           "react/jsx-max-depth": ["error", { max: 4 }],
+          // React owns the nested ReactNode types; component props remain readonly.
+          "typescript/prefer-readonly-parameter-types": [
+            "error",
+            { allow: [{ from: "package", name: "ReactNode", package: "react" }] },
+          ],
+          // HTML charset metadata requires the hyphenated UTF-8 label.
+          "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
         },
       },
     ],
