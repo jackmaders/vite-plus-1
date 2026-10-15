@@ -51,7 +51,6 @@ jobs:
       - name: Verify generated route tree
         run: git diff --exit-code -- src/routeTree.gen.ts
 
-  # Run enforced application coverage in a stable job gated by the existing required aggregate.
   unit:
     name: 🧪 Unit Tests
     runs-on: ubuntu-latest
@@ -69,7 +68,6 @@ jobs:
           cache: true
       - name: Run unit tests with coverage
         run: vp run test:coverage
-      # Retain diagnostics on failures; a missing report must also fail the job.
       - name: Upload coverage report
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -81,7 +79,6 @@ jobs:
   status:
     name: ✅ Status Checks
     if: ${{ always() }}
-    # Preserve the required check name; no repository ruleset update is necessary.
     needs: [quality, build, unit]
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -94,5 +91,4 @@ jobs:
         run: |
           test "$QUALITY_RESULT" = success
           test "$BUILD_RESULT" = success
-          # Equality rejects failures, cancellations and unexpected skips.
           test "$UNIT_RESULT" = success
