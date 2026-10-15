@@ -1,6 +1,7 @@
 # Vite+ with React and TanStack Start
 
-A minimal server-rendered React starter with typed file-based routing. Vite+ owns
+The official TanStack Start blank React scaffold, generated with `vp create`,
+with a second route and strict linting. Vite+ owns
 runtime management, dependencies, development, builds, formatting, linting, type
 checking, and tests.
 
@@ -23,9 +24,8 @@ a test framework or browser infrastructure.
 
 ```text
 src/
-├── client.tsx          # Hydrate the document in React StrictMode
 ├── router.tsx          # Create a router per request; register inferred types
-├── routes/__root.tsx   # Document, metadata, stylesheet, navigation, fallback
+├── routes/__root.tsx   # Document, metadata, stylesheet, navigation
 ├── routes/index.tsx    # /
 ├── routes/about.tsx    # /about
 ├── routeTree.gen.ts    # Committed output from TanStack's route generator
@@ -38,10 +38,11 @@ updated tree with the routes. Never edit or format the generated file manually.
 The existing Build PR check rejects route-tree drift after building.
 
 Configuration stays in `vite.config.ts` (strict compiler options in
-`tsconfig.json`). TanStack Start supplies its default streaming server entry;
+`tsconfig.json`). TanStack Start supplies its default StrictMode hydration and streaming server entries;
 `vp run build` writes the request handler to `dist/server/server.js` and static
 assets to `dist/client`. `vp preview` serves both locally. A production host adapter
 and deployment are outside this starter's scope.
 
-See [setup](docs/setup.md) for repository setup and development, and
+See [starter provenance](docs/starter-provenance.md) for the generator command and
+exact adaptations, [setup](docs/setup.md) for repository setup and development, and
 [lint policy](docs/lint-policy.md) for coverage, exceptions, and deferred plugins.

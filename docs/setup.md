@@ -67,10 +67,10 @@ vp dev
 
 Open the printed local URL and follow Home → About → Home. Both `/` and `/about`
 are server-rendered React pages. TanStack Router takes over navigation after
-`src/client.tsx` hydrates the document in StrictMode. `src/router.tsx` creates a
+Start’s default client entry hydrates the document in StrictMode. `src/router.tsx` creates a
 fresh router for each request and registers its inferred type. The root route
-owns the HTML document, head metadata, stylesheet, navigation, and not-found UI.
-Start supplies the default streaming server entry, so no custom server adapter
+owns the HTML document, head metadata, stylesheet and navigation.
+Start supplies the default client and streaming server entries, so no custom adapter
 is needed for development or preview.
 
 Use `vp add` and `vp remove` for dependencies. Keep Vite, Start, React plugin, lint,
@@ -110,3 +110,7 @@ unchanged. Hosting adapters, deployment, authentication, data libraries, UI
 libraries, and browser-test infrastructure remain outside this migration.
 
 See [lint policy](lint-policy.md) before adding hooks, route loaders, or exceptions.
+
+The application files originate from the official blank scaffold generated with
+`vp create @tanstack/start`. See [starter provenance](starter-provenance.md) for
+the resolved generator version, exact command, copied files, and adaptations.

@@ -1,6 +1,6 @@
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { defineConfig } from "vite-plus";
+import { defineConfig, lazyPlugins } from "vite-plus";
 
 export default defineConfig({
   fmt: { ignorePatterns: ["src/routeTree.gen.ts"] },
@@ -54,8 +54,6 @@ export default defineConfig({
         rules: {
           // The document shell owns html/body/navigation and needs four JSX levels.
           "react/jsx-max-depth": ["error", { max: 4 }],
-          // The framework shell and not-found fallback are colocated stateless components.
-          "react/no-multi-comp": ["error", { ignoreStateless: true }],
         },
       },
     ],
@@ -114,7 +112,7 @@ export default defineConfig({
       react: { linkComponents: [{ attribute: "to", name: "Link" }] },
     },
   },
-  plugins: [tanstackStart(), viteReact()],
+  plugins: lazyPlugins(() => [tanstackStart(), viteReact()]) ?? [],
   resolve: { tsconfigPaths: true },
   staged: {
     "*": "vp check --fix",

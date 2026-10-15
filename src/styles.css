@@ -1,35 +1,13 @@
-:root {
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-  color: #17212b;
-  background: #f7f9fb;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+* {
+  box-sizing: border-box;
 }
 
 body {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-nav {
-  display: flex;
-  gap: 1.5rem;
-  border-bottom: 1px solid #cad3dc;
-  padding-bottom: 1rem;
+  margin: 0;
+  font-family: system-ui, sans-serif;
 }
 
 main {
-  padding-block: 2rem;
-}
-
-a {
-  color: #1656a3;
-  text-underline-offset: 0.2em;
-}
-
-a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
+  width: min(42rem, calc(100% - 2rem));
+  margin: 4rem auto;
 }

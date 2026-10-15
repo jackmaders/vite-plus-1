@@ -1,13 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({ component: HomePage });
+export const Route = createFileRoute("/")({ component: Home });
 
-function HomePage() {
+function Home() {
   return (
     <main>
-      <h1>Vite+ meets TanStack Start</h1>
-      <p>A minimal React starter with file-based routing and server rendering.</p>
-      <Link to="/about">About this starter</Link>
+      <h1>Welcome to TanStack Start</h1>
+      <p>
+        Edit <code>src/routes/index.tsx</code> to get started.
+      </p>
     </main>
   );
 }
