@@ -21,8 +21,8 @@ Vite+ installs the configured Node 24.22.0 and pnpm 12.11.2. Validate with `vp e
 ## GitHub Setup
 
 ```bash
-export GH_OWNER="your-github-owner"
-export GH_REPO="${GH_OWNER}/your-project-name"
+export GH_OWNER="$(gh api user --jq .login)"
+export GH_REPO="${GH_OWNER}/$(node -p 'require("./package.json").name')"
 
 git add .
 git commit -m "chore: initialize project"
