@@ -13,11 +13,10 @@ Create the project and enter the generated directory:
 ```bash
 vp create github:jackmaders/vite-plus
 cd <project-name>
-vp node -e 'const fs = require("node:fs"); const path = require("node:path"); const pkg = JSON.parse(fs.readFileSync("package.json", "utf8")); pkg.name = path.basename(process.cwd()); fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");'
 vp install
 ```
 
-The command sets the package name to the project directory name. The GitHub repository name is inferred from this field.
+Set `name` in `package.json` to your new project name; remote templates retain the template's package name. The GitHub repository name is inferred from this field.
 
 Vite+ installs the configured Node 24.22.0 and pnpm 12.11.2. Validate with `vp env current`.
 
