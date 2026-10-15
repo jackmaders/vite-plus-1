@@ -23,7 +23,7 @@ jobs:
           persist-credentials: false
       - uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
-          version: "1.2.0"
+          version-file: pnpm-workspace.yaml
           run-install: true
           cache: true
       - run: vp check
@@ -38,7 +38,7 @@ jobs:
           persist-credentials: false
       - uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
-          version: "1.2.0"
+          version-file: pnpm-workspace.yaml
           run-install: true
           cache: true
       - run: vp build
