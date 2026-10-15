@@ -2,7 +2,7 @@
 
 Reviewed 2026-10-15 against primary upstream documentation and the reference at
 `/home/jackw/dev/personal/template-tanstack-start/biome.json` and `scripts/biome/*.grit`.
-These are adoption decisions, not installed integrations: this starter has no React,
+Framework integrations below are adoption decisions: this starter has no React,
 TanStack, component-test, or Playwright infrastructure yet.
 
 ## Loading plugins
@@ -108,3 +108,19 @@ unsupported now; evaluate maintained stylesheet/Tailwind tooling when that stack
 arrives, preserving those precise exceptions rather than claiming category parity.
 The reference's Biome assists (including source sorting) also require a separate
 comparison with Oxfmt sorting and compiler/linter behavior.
+
+## Additional installed safety plugins
+
+### Regexp 3.3.1
+
+Registered through `jsPlugins` with explicit settings for every exported rule.
+All nondeprecated, nonconflicting rules are errors, including super-linear
+backtracking/movement, contradictory assertions, missing flags, captures and
+replacement checks. Existing native equivalents remain authoritative for empty
+character classes, constructor validity, unnecessary escapes, exec/test preference,
+Unicode-mode requirements, and escape style. Each excluded rule is commented next
+to its setting. The ES2024 `v` flag is deferred because the compiler target remains
+ES2023. Regex-content conventions supplement Oxfmt rather than replacing it.
+
+Sources: [Regexp rule inventory](https://ota-meshi.github.io/eslint-plugin-regexp/rules/)
+and [Oxlint JS plugin conformance](https://oxc.rs/docs/guide/usage/linter/js-plugins.html).
