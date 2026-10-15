@@ -4,12 +4,16 @@ import typescriptLogo from "./assets/typescript.svg";
 import viteLogo from "./assets/vite.svg";
 import { setupCounter } from "./counter.ts";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+const app = document.querySelector<HTMLDivElement>("#app");
+if (!app) {
+  throw new Error("Missing #app element");
+}
+app.innerHTML = `
 <section id="center">
   <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
+    <img class="base" width="170" height="179">
+    <img class="framework" alt="TypeScript logo"/>
+    <img class="vite" alt="Vite logo" />
   </div>
   <div>
     <h1>Get started</h1>
@@ -28,13 +32,13 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <ul>
       <li>
         <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
+          <img class="logo" alt="" />
           Explore Vite
         </a>
       </li>
       <li>
         <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
+          <img class="button-icon" alt="">
           Learn more
         </a>
       </li>
@@ -57,4 +61,22 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 <section id="spacer"></section>
 `;
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+function setImageSource(selector: string, source: string) {
+  const image = document.querySelector<HTMLImageElement>(selector);
+  if (!image) {
+    throw new Error(`Missing image: ${selector}`);
+  }
+  image.src = source;
+}
+
+setImageSource("img.base", heroImg);
+setImageSource("img.framework", typescriptLogo);
+setImageSource("img.vite", viteLogo);
+setImageSource("img.logo", viteLogo);
+setImageSource("img.button-icon", typescriptLogo);
+
+const counter = document.querySelector<HTMLButtonElement>("#counter");
+if (!counter) {
+  throw new Error("Missing #counter element");
+}
+setupCounter(counter);

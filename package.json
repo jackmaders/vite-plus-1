@@ -10,6 +10,7 @@
     "prepare": "vp config"
   },
   "devDependencies": {
+    "eslint-plugin-no-unsanitized": "4.1.5",
     "typescript": "~6.0.2",
     "vite": "catalog:",
     "vite-plus": "catalog:"

@@ -1,9 +1,13 @@
 export function setupCounter(element: HTMLButtonElement) {
-  let counter = 0;
-  const setCounter = (count: number) => {
+  const increment = 1;
+  const initialCount = 0;
+  let counter = initialCount;
+  function setCounter(count: number) {
     counter = count;
-    element.innerHTML = `Count is ${counter}`;
-  };
-  element.addEventListener("click", () => setCounter(counter + 1));
-  setCounter(0);
+    element.textContent = `Count is ${counter}`;
+  }
+  element.addEventListener("click", () => {
+    setCounter(counter + increment);
+  });
+  setCounter(initialCount);
 }
