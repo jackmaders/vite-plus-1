@@ -66,3 +66,45 @@ record any semantic gap. The local `vp lint --rules` command returned no invento
 during this review, so the packaged schema was used instead.
 [Native plugin coverage](https://oxc.rs/docs/guide/usage/linter/plugins),
 [versioned native rule inventory](https://oxc.rs/docs/guide/usage/linter/rules.html).
+
+## Third-party integrations
+
+| Candidate                                    | Maintenance / compatibility                                                                                                                                                                                                   | Overlap and recommendation                                                                                                                                                                                                                                                                                                             |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eslint-plugin-playwright`                   | Community maintained, with an active repository and changelog; documented Oxlint conformance coverage. It is not Microsoft's first-party Playwright package.                                                                  | Install when end-to-end tests arrive, scoped to those files. Prioritize missing Playwright awaits, web-first assertions, locator APIs, and timeout bans. Generic promise and test rules overlap, but do not understand all Playwright semantics. Keep Oxfmt responsible for spacing rather than enabling the preset's formatting rule. |
+| `eslint-plugin-boundaries`                   | Maintained independently; current documentation is version 7.1.0, with ESLint 9 support since v5. No documented Oxlint conformance guarantee.                                                                                 | Consider when feature directories and aliases arrive. Classification/dependency policies can enforce shared → feature → composition direction and isolation. Probe alias resolution, type imports, re-exports and dynamic imports before adoption.                                                                                     |
+| `eslint-plugin-import` `no-restricted-paths` | Maintained import ecosystem; resolved-path zones support `target`, `from`, and exceptions. This rule is absent from the current native rule inventory. Requires a JS alias because `import` is a reserved native plugin name. | Alternative for a small fixed folder graph, only if native `no-restricted-imports` scoped overrides cannot express the requirement. Do not install an entire duplicate import rule set.                                                                                                                                                |
+
+Sources: [Playwright plugin](https://github.com/mskelton/eslint-plugin-playwright),
+[Playwright changelog](https://github.com/mskelton/eslint-plugin-playwright/blob/main/CHANGELOG.md),
+[Boundaries rules](https://www.jsboundaries.dev/docs/rules/),
+[Boundaries installation / compatibility](https://www.jsboundaries.dev/docs/installation/),
+[resolved import zones](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md).
+
+## Comparison with the actual Grit checks
+
+| Reference check                    | Native or maintained-plugin replacement                                                                                                                                                                                                                       | Remaining gap / timing                                                                                                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `architecture-boundaries.grit`     | Native restricted-import patterns and directory overrides can ban `__mocks__` imports, parent imports, composition imports from shared/features, and the account/posts cross-imports. Boundaries provides scalable resolved classification if later required. | Configure after actual feature layout and `@/` alias exist; probe side-effect imports and alias bypasses. Avoid a custom port before this evaluation.                            |
+| `prefer-user-event.grit`           | Testing Library's `prefer-user-event`, combined with its async-event rules.                                                                                                                                                                                   | Enable with component tests; verify the reference's event subset and `userEvent.setup()` convention.                                                                             |
+| `no-side-effects-in-wait-for.grit` | Testing Library's `no-wait-for-side-effects` covers interaction/render side effects.                                                                                                                                                                          | Probe all reference mock mutation methods and `vi` reset/spy operations; generic plugin coverage must not be claimed for those extra cases without evidence.                     |
+| `no-inline-vitest-mock.grit`       | No native equivalent identified. Locked Oxlint 1.88.0 does **not** register `no-restricted-syntax`; generic native AST selectors are not an available replacement.                                                                                            | A later maintained JS rule or small local rule must inspect factories passed to `vi.mock` / `vi.doMock`, including argument shapes and aliases. Defer to test infrastructure.    |
+| `prefer-once-mocks.grit`           | No native equivalent identified; locked Oxlint has no `no-restricted-syntax` selector rule.                                                                                                                                                                   | A later maintained JS rule or small local rule remains a candidate; preserve persistent defaults in `__mocks__` and assess aliases first.                                        |
+| `require-test-aaa.grit`            | Generic assertion rules can require expectations but do not enforce this policy.                                                                                                                                                                              | No equivalent identified for ordered Act/Assert comments and assertion-only statements after Assert. A later custom rule remains a candidate after infrastructure/plugin probes. |
+
+[Testing Library's maintained rule inventory](https://github.com/testing-library/eslint-plugin-testing-library)
+and [Oxlint plugin compatibility discussion](https://github.com/oxc-project/oxc/discussions/14862)
+support the maintained component-test replacements. Playwright linting addresses
+end-to-end test behavior; it does not replace these Vitest-specific Grit policies.
+
+## CSS and Tailwind gap
+
+The reference enables CSS lint categories and Tailwind directive parsing, with
+narrow exceptions for arbitrary values in `src/components/ui/**` and duplicate
+selectors/layered styles in `src/styles.css`. Native Oxlint JavaScript/TypeScript
+rules do not recreate CSS semantic checks, Tailwind arbitrary-value restrictions,
+or stylesheet layer policy. Oxfmt formatting is not lint coverage. Record these as
+unsupported now; evaluate maintained stylesheet/Tailwind tooling when that stack
+arrives, preserving those precise exceptions rather than claiming category parity.
+The reference's Biome assists (including source sorting) also require a separate
+comparison with Oxfmt sorting and compiler/linter behavior.

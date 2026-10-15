@@ -20,36 +20,36 @@ checks from those categories. They are semantic counterparts, not identical pres
 Native TypeScript rules are selected explicitly in step 1; step 2 enables all
 categories from the selected native plugins, including the counterparts below.
 
-| Biome check                                                     | Native Oxlint / compiler counterpart                                                                                                       |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `noExplicitAny`                                                 | `typescript/no-explicit-any`                                                                                                               |
-| `noImplicitAnyLet`                                              | Compiler `strict` / `noImplicitAny`; no exact ban on evolving-any locals                                                                   |
-| `useImportType`, type-only exports                              | `typescript/consistent-type-imports`, `typescript/consistent-type-exports`; compiler `verbatimModuleSyntax`                                |
-| `noFloatingPromises`, `noMisusedPromises`                       | `typescript/no-floating-promises`, `typescript/no-misused-promises`                                                                        |
-| `noNonNullAssertion`                                            | `typescript/no-non-null-assertion`                                                                                                         |
-| `noNonNullAssertedOptionalChain`                                | `typescript/no-non-null-asserted-optional-chain`                                                                                           |
-| `noExtraNonNullAssertion`                                       | `typescript/no-extra-non-null-assertion`                                                                                                   |
-| `noConfusingNonNullAssertion`                                   | `typescript/no-confusing-non-null-assertion`                                                                                               |
-| `noInferrableTypes`                                             | `typescript/no-inferrable-types`                                                                                                           |
-| `noBannedTypes`                                                 | `typescript/ban-types`, `typescript/no-wrapper-object-types`                                                                               |
-| `noEmptyInterface`                                              | `typescript/no-empty-interface`, `typescript/no-empty-object-type`                                                                         |
-| `noNamespace`                                                   | `typescript/no-namespace`                                                                                                                  |
-| `noParameterProperties`                                         | `typescript/parameter-properties`                                                                                                          |
-| `noEnum`, `useEnumInitializers`                                 | `no-restricted-syntax` is unavailable; enum ban has no exact native counterpart; `typescript/prefer-enum-initializers` covers initializers |
-| `noDuplicateEnumValues`                                         | `typescript/no-duplicate-enum-values`                                                                                                      |
-| `noUnsafeDeclarationMerging`                                    | `typescript/no-unsafe-declaration-merging`                                                                                                 |
-| `useAsConstAssertion`                                           | `typescript/prefer-as-const`                                                                                                               |
-| `useArrayType`                                                  | `typescript/array-type`                                                                                                                    |
-| `useConsistentBuiltinInstantiation`                             | `typescript/consistent-generic-constructors` plus native constructor rules                                                                 |
-| `useConsistentMemberAccessibility`                              | `typescript/explicit-member-accessibility`                                                                                                 |
-| `useConsistentTypeDefinitions`                                  | `typescript/consistent-type-definitions`                                                                                                   |
-| `useShorthandFunctionType`                                      | `typescript/prefer-function-type`                                                                                                          |
-| `useAwait`, `useAwaitThenable`                                  | `typescript/require-await`, `typescript/await-thenable`                                                                                    |
-| `useExhaustiveSwitchCases`                                      | `typescript/switch-exhaustiveness-check`                                                                                                   |
-| `useOptionalChain`, `useNullishCoalescing`                      | `typescript/prefer-optional-chain`, `typescript/prefer-nullish-coalescing`                                                                 |
-| `noUnusedVariables`, `noUnusedFunctionParameters`               | Existing compiler `noUnusedLocals`, `noUnusedParameters`, plus native `no-unused-vars`                                                     |
-| `noUnreachable`, `noUnusedLabels`                               | Compiler unreachable/unused-label checks and native `no-unreachable`, `no-unused-labels`                                                   |
-| `useExplicitType`, `useExplicitReturnType` (reference disabled) | No annotation mandate; disable `typescript/explicit-function-return-type` and `typescript/explicit-module-boundary-types`                  |
+| Biome check                                                     | Native Oxlint / compiler counterpart                                                                                                 |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `noExplicitAny`                                                 | `typescript/no-explicit-any`                                                                                                         |
+| `noImplicitAnyLet`                                              | Compiler `strict` / `noImplicitAny`; no exact ban on evolving-any locals                                                             |
+| `useImportType`, type-only exports                              | `typescript/consistent-type-imports`, `typescript/consistent-type-exports`; compiler `verbatimModuleSyntax`                          |
+| `noFloatingPromises`, `noMisusedPromises`                       | `typescript/no-floating-promises`, `typescript/no-misused-promises`                                                                  |
+| `noNonNullAssertion`                                            | `typescript/no-non-null-assertion`                                                                                                   |
+| `noNonNullAssertedOptionalChain`                                | `typescript/no-non-null-asserted-optional-chain`                                                                                     |
+| `noExtraNonNullAssertion`                                       | `typescript/no-extra-non-null-assertion`                                                                                             |
+| `noConfusingNonNullAssertion`                                   | `typescript/no-confusing-non-null-assertion`                                                                                         |
+| `noInferrableTypes`                                             | `typescript/no-inferrable-types`                                                                                                     |
+| `noBannedTypes`                                                 | `typescript/ban-types`, `typescript/no-wrapper-object-types`                                                                         |
+| `noEmptyInterface`                                              | `typescript/no-empty-interface`, `typescript/no-empty-object-type`                                                                   |
+| `noNamespace`                                                   | `typescript/no-namespace`                                                                                                            |
+| `noParameterProperties`                                         | `typescript/parameter-properties`                                                                                                    |
+| `noEnum`, `useEnumInitializers`                                 | Compiler `erasableSyntaxOnly` rejects enums here; no native enum-ban rule; `typescript/prefer-enum-initializers` covers initializers |
+| `noDuplicateEnumValues`                                         | `typescript/no-duplicate-enum-values`                                                                                                |
+| `noUnsafeDeclarationMerging`                                    | `typescript/no-unsafe-declaration-merging`                                                                                           |
+| `useAsConstAssertion`                                           | `typescript/prefer-as-const`                                                                                                         |
+| `useArrayType`                                                  | `typescript/array-type`                                                                                                              |
+| `useConsistentBuiltinInstantiation`                             | `typescript/consistent-generic-constructors` plus native constructor rules                                                           |
+| `useConsistentMemberAccessibility`                              | `typescript/explicit-member-accessibility`                                                                                           |
+| `useConsistentTypeDefinitions`                                  | `typescript/consistent-type-definitions`                                                                                             |
+| `useShorthandFunctionType`                                      | `typescript/prefer-function-type`                                                                                                    |
+| `useAwait`, `useAwaitThenable`                                  | `typescript/require-await`, `typescript/await-thenable`                                                                              |
+| `useExhaustiveSwitchCases`                                      | `typescript/switch-exhaustiveness-check`                                                                                             |
+| `useOptionalChain`, `useNullishCoalescing`                      | `typescript/prefer-optional-chain`, `typescript/prefer-nullish-coalescing`                                                           |
+| `noUnusedVariables`, `noUnusedFunctionParameters`               | Existing compiler `noUnusedLocals`, `noUnusedParameters`, plus native `no-unused-vars`                                               |
+| `noUnreachable`, `noUnusedLabels`                               | Compiler unreachable/unused-label checks and native `no-unreachable`, `no-unused-labels`                                             |
+| `useExplicitType`, `useExplicitReturnType` (reference disabled) | No annotation mandate; disable `typescript/explicit-function-return-type` and `typescript/explicit-module-boundary-types`            |
 
 Compiler checks and type-aware unsafe-value rules add coverage beyond Biome's
 syntax checks. Some similarly named checks differ on default options and edge cases;
@@ -107,8 +107,8 @@ replace those checks. Biome assists are not lint rules; Oxfmt handles formatting
 and import ordering, but does not promise every Biome assist transformation.
 
 No exact native equivalent is established here for every Biome naming convention,
-all secret detection heuristics (the reference disables `noSecrets`), or all enum
-restrictions. The original six Grit checks are reviewed separately, with no custom
+all secret detection heuristics (the reference disables `noSecrets`). The existing
+compiler `erasableSyntaxOnly` rejects TypeScript enums and parameter properties. The original six Grit checks are reviewed separately, with no custom
 ports introduced. Framework and architecture checks require the corresponding
 application/test layout before meaningful configuration.
 
@@ -127,3 +127,6 @@ for optional properties, and unchecked indexed access. A warning-level debugger
 probe still failed through `denyWarnings`. Positive probes confirmed a named
 function with inferred return type, CSS side-effect imports, and a named configuration
 value exported as default. Anonymous default object exports remain restricted.
+
+Plugin maintenance, compatibility, original Grit coverage, and adoption phases are
+recorded in [the plugin review](./lint-plugin-review.md).
