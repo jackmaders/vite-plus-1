@@ -2,6 +2,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
+// oxlint-disable-next-line import/no-default-export -- Vite configuration requires a default export.
 export default defineConfig({
   fmt: { ignorePatterns: ["src/routeTree.gen.ts"] },
   lint: {
@@ -33,33 +34,12 @@ export default defineConfig({
         files: ["**/*.config.ts", "scripts/**/*.ts"],
       },
       {
-        files: ["**/*.config.ts"],
-        rules: {
-          // Vite configuration uses a default export, matching the reference.
-          "import/no-default-export": "off",
-        },
-      },
-      {
         files: ["src/routes/**/*.tsx"],
         rules: {
           // Route components are hoisted declarations, matching the reference layout.
           "no-use-before-define": ["error", { functions: false }],
           // File routes must export the route object for TanStack tooling and HMR.
           "react/only-export-components": "off",
-        },
-      },
-      {
-        files: ["src/routes/__root.tsx"],
-        rules: {
-          // The document shell owns html/body/navigation and needs four JSX levels.
-          "react/jsx-max-depth": ["error", { max: 4 }],
-          // React owns the nested ReactNode types; component props remain readonly.
-          "typescript/prefer-readonly-parameter-types": [
-            "error",
-            { allow: [{ from: "package", name: "ReactNode", package: "react" }] },
-          ],
-          // HTML charset metadata requires the hyphenated UTF-8 label.
-          "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
         },
       },
     ],
@@ -93,6 +73,8 @@ export default defineConfig({
       "no-ternary": "off",
       "no-unsanitized/method": "error",
       "no-unsanitized/property": "error",
+      // Check every parameter, including those before the last used one.
+      "no-unused-vars": ["error", { args: "all" }],
       "one-var": ["error", "never"],
       // Compiler checks duplicate the dedicated native Hooks diagnostics.
       "react/exhaustive-effect-dependencies": "off",

@@ -23,13 +23,13 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedSideEffectImports": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
 
-    /* Linting */
+    /* TypeScript also catches unused private members beyond Oxlint's bindings. */
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+
+    /* Syntax and control flow */
     "erasableSyntaxOnly": true,
+    /* Unlike Oxlint's default, reject annotated switch fallthrough too. */
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "*.config.ts", "scripts/**/*.ts"]

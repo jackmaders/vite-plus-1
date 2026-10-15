@@ -13,6 +13,7 @@ export const Route = createRootRoute({
     ],
     meta: [
       {
+        // oxlint-disable-next-line unicorn/text-encoding-identifier-case -- HTML charset metadata requires the hyphenated UTF-8 label.
         charSet: "utf-8",
       },
       {
@@ -27,6 +28,7 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
+// oxlint-disable-next-line typescript/prefer-readonly-parameter-types -- ReactNode includes framework-owned mutable types; component props remain readonly.
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
@@ -36,7 +38,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <body>
         <header>
           <nav aria-label="Main navigation">
+            {/* oxlint-disable-next-line react/jsx-max-depth -- Document navigation nests inside html and body. */}
             <Link to="/">Home</Link>
+            {/* oxlint-disable-next-line react/jsx-max-depth -- Document navigation nests inside html and body. */}
             <Link to="/about">About</Link>
           </nav>
         </header>
