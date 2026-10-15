@@ -42,7 +42,7 @@ gh run list --workflow pull-request.yml --limit 1
 gh run watch RUN_ID --exit-status
 ```
 
-After `Code Quality` and `Build` pass, apply the main-branch ruleset:
+After `PR Checks` passes, apply the main-branch ruleset:
 
 ```bash
 gh api --method POST 'repos/{owner}/{repo}/rulesets' \
