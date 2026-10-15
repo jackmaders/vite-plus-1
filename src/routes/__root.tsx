@@ -13,8 +13,7 @@ export const Route = createRootRoute({
     ],
     meta: [
       {
-        // oxlint-disable-next-line unicorn/text-encoding-identifier-case -- HTML charset metadata requires the hyphenated UTF-8 label.
-        charSet: "utf-8",
+        charSet: "utf8",
       },
       {
         content: "width=device-width, initial-scale=1",
