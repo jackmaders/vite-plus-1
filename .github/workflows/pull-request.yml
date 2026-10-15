@@ -47,7 +47,9 @@ jobs:
           run-install: true
           cache: true
       - name: Build project
-        run: vp build
+        run: vp run build
+      - name: Verify generated route tree
+        run: git diff --exit-code -- src/routeTree.gen.ts
 
   status:
     name: ✅ Status Checks
