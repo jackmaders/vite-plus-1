@@ -11,9 +11,9 @@ if (!app) {
 app.innerHTML = `
 <section id="center">
   <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
+    <img class="base" width="170" height="179">
+    <img class="framework" alt="TypeScript logo"/>
+    <img class="vite" alt="Vite logo" />
   </div>
   <div>
     <h1>Get started</h1>
@@ -32,13 +32,13 @@ app.innerHTML = `
     <ul>
       <li>
         <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
+          <img class="logo" alt="" />
           Explore Vite
         </a>
       </li>
       <li>
         <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
+          <img class="button-icon" alt="">
           Learn more
         </a>
       </li>
@@ -60,6 +60,20 @@ app.innerHTML = `
 <div class="ticks"></div>
 <section id="spacer"></section>
 `;
+
+function setImageSource(selector: string, source: string) {
+  const image = document.querySelector<HTMLImageElement>(selector);
+  if (!image) {
+    throw new Error(`Missing image: ${selector}`);
+  }
+  image.src = source;
+}
+
+setImageSource("img.base", heroImg);
+setImageSource("img.framework", typescriptLogo);
+setImageSource("img.vite", viteLogo);
+setImageSource("img.logo", viteLogo);
+setImageSource("img.button-icon", typescriptLogo);
 
 const counter = document.querySelector<HTMLButtonElement>("#counter");
 if (!counter) {

@@ -16,6 +16,7 @@ export default defineConfig({
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
       "eslint-plugin-regexp",
+      "eslint-plugin-no-unsanitized",
     ],
     options: {
       denyWarnings: true,
@@ -56,6 +57,8 @@ export default defineConfig({
       "import/prefer-default-export": "off",
       // Match the reference's deliberate allowance for conditional expressions.
       "no-ternary": "off",
+      "no-unsanitized/method": "error",
+      "no-unsanitized/property": "error",
       // Separate declarations preserve initialization order across DOM rendering.
       "one-var": ["error", "never"],
       "regexp/confusing-quantifier": "error",
