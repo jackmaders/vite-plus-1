@@ -20,13 +20,13 @@ Vite+ installs the configured Node 24.22.0 and pnpm 12.11.2. Validate with `vp e
 
 ## GitHub Setup
 
-Create a repository with GitHub Actions enabled. Replace `OWNER/REPO` in `gh repo create` with your new repository name. Run the remaining commands from the project directory; GitHub CLI detects the repository from its Git remote. You need repository administration rights to apply the ruleset.
-
 ```bash
-git init -b main
+export GH_OWNER="your-github-owner"
+export GH_REPO="${GH_OWNER}/your-project-name"
+
 git add .
 git commit -m "chore: initialize project"
-gh repo create OWNER/REPO --private --source=. --remote=origin --push
+gh repo create "$GH_REPO" --private --source=. --remote=origin --push
 gh repo edit --default-branch main \
   --delete-branch-on-merge --enable-squash-merge \
   --enable-merge-commit=false --enable-rebase-merge=false
