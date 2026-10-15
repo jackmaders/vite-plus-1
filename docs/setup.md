@@ -16,6 +16,8 @@ cd <project-name>
 vp install
 ```
 
+Set `name` in `package.json` to your new project name; remote templates retain the template's package name. The GitHub repository name is inferred from this field.
+
 Vite+ installs the configured Node 24.22.0 and pnpm 12.11.2. Validate with `vp env current`.
 
 ## GitHub Setup
