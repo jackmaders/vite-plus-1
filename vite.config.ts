@@ -19,7 +19,6 @@ export default defineConfig({
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
       "eslint-plugin-no-unsanitized",
-      { name: "react-hooks-js", specifier: "eslint-plugin-react-hooks" },
       "@tanstack/eslint-plugin-router",
     ],
     options: {
@@ -43,9 +42,9 @@ export default defineConfig({
       {
         files: ["src/routes/**/*.tsx"],
         rules: {
-          // File routes must export the route object for TanStack tooling and HMR.
           // Route components are hoisted declarations, matching the reference layout.
           "no-use-before-define": ["error", { functions: false }],
+          // File routes must export the route object for TanStack tooling and HMR.
           "react/only-export-components": "off",
         },
       },
@@ -94,11 +93,7 @@ export default defineConfig({
       "no-ternary": "off",
       "no-unsanitized/method": "error",
       "no-unsanitized/property": "error",
-      // Separate declarations preserve initialization order across DOM rendering.
       "one-var": ["error", "never"],
-      // These compiler checks have no native equivalent in Oxlint 1.88.0.
-      "react-hooks-js/config": "error",
-      "react-hooks-js/gating": "error",
       // Compiler checks duplicate the dedicated native Hooks diagnostics.
       "react/exhaustive-effect-dependencies": "off",
       "react/hooks": "off",
