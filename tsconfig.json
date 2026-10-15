@@ -30,5 +30,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
+  // Type-check runner setup outside src alongside application code and configuration.
   "include": ["src", "tests/vitest/**/*.ts", "*.config.ts", "scripts/**/*.ts"]
 }
