@@ -124,3 +124,68 @@ ES2023. Regex-content conventions supplement Oxfmt rather than replacing it.
 
 Sources: [Regexp rule inventory](https://ota-meshi.github.io/eslint-plugin-regexp/rules/)
 and [Oxlint JS plugin conformance](https://oxc.rs/docs/guide/usage/linter/js-plugins.html).
+
+Regexp probes rejected nested quantifiers with exponential backtracking and an
+impossible anchor; a simple anchored linear expression passed.
+
+### No Unsanitized 4.1.5
+
+Both `no-unsanitized/property` and `no-unsanitized/method` are errors. The starter
+renders a static HTML template and assigns imported asset URLs with image `src`
+properties. No sanitizer exemption is needed. These are DOM-sink checks, not a
+general taint analysis or a validator for every URL protocol.
+
+Temporary probes rejected `location.hash` assigned to `innerHTML` and passed to
+`insertAdjacentHTML`; `textContent` and literal HTML passed. Both plugin rules run
+under the locked Oxlint. Mozilla is not on Oxlint's published conformance list, so
+these local probes establish the compatibility used here.
+
+Source: [Mozilla's plugin and rules](https://github.com/mozilla/eslint-plugin-no-unsanitized).
+
+### SonarJS 4.2.2
+
+All 295 exported rules have explicit decisions across three type-checked modules:
+
+- `lint/sonar-rules.ts`: 102 enabled error-level checks, including cognitive and
+  expression complexity, duplicate functions/branches, collection mistakes,
+  suspicious returns, cryptographic and server-security patterns, and hardcoded
+  secrets.
+- `lint/sonar-unavailable.ts`: 82 deprecated or TypeScript-service-dependent rules.
+  JavaScript plugin type services are unsupported by Oxlint; native TypeScript
+  checks and Regexp cover many, but not every, excluded diagnostic.
+- `lint/sonar-exceptions.ts`: 111 individually commented exclusions for native or
+  Regexp counterparts, formatting conflicts, missing framework/test infrastructure,
+  and policies requiring a project-specific pattern or license-header template.
+
+No plugin preset or native category implicitly supplies these rules. Versions are
+pinned so upgrades require an explicit rule-inventory review. Comparisons use the
+installed package metadata, including `docs.requiresTypeChecking` and `deprecated`.
+Some native overlaps are partial; additional Sonar checks remain enabled in those
+cases rather than assuming identical behavior.
+
+The requested broader safety policy enables Sonar's secret/password/signature and
+wallet-phrase checks even though the original Biome policy disabled `noSecrets`.
+These heuristics may need narrowly scoped exceptions for legitimate fixtures when
+tests arrive. No such exception is currently needed.
+
+Observed downsides and resolutions:
+
+- `sonarjs/no-reference-error` falsely reported the built-in `Error` constructor.
+  The native `no-undef` rule remains authoritative; the duplicate JS rule is off.
+- Sonar's layout rules compete with Oxfmt and are explicitly off. Native object
+  spread prohibitions also conflict with `prefer-object-spread`; only
+  `vite.config.ts` permits spread for composing the explicit rule tables.
+- This small project's lint/type pass increased from about 0.7 seconds with Regexp
+  to about 1.4 seconds with Sonar on the same machine. This is an informal local
+  observation, not a benchmark guarantee.
+- Type-service rules cannot be made effective merely by enabling
+  `lint.options.typeAware`: that option powers native analysis, not JS parser services.
+
+Temporary probes rejected a hardcoded IP, a password-like literal, and reading an
+empty collection with `join`; a nonempty collection and a normal typed function
+passed. The empty-collection rule does not cover every newer API (an `at` probe did
+not trigger it). Native and compiler checks remain enabled alongside these rules.
+
+Sources: [Sonar's maintained plugin documentation](https://github.com/SonarSource/SonarJS/blob/master/packages/analysis/src/jsts/rules/README.md),
+[rule implementations](https://github.com/SonarSource/SonarJS/tree/master/packages/analysis/src/jsts/rules),
+and [Oxlint API limits and conformance](https://oxc.rs/docs/guide/usage/linter/js-plugins.html).

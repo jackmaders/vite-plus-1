@@ -70,19 +70,20 @@ exists. Environment globals do not add React, Cloudflare, or Node ambient types 
 the compiler. `denyWarnings: true` rejects warnings and
 `reportUnusedDisableDirectives: "error"` rejects obsolete suppressions.
 
-Every disabled rule has a nearby configuration comment. The full exception list:
+Every disabled rule has a nearby configuration comment. The native exception list (additional JS plugin decisions are linked below):
 
-| Setting                                           | Scope            | Reason                                                               |
-| ------------------------------------------------- | ---------------- | -------------------------------------------------------------------- |
-| `import/no-named-export: off`                     | Global           | Contradicts reference named exports                                  |
-| `import/prefer-default-export: off`               | Global           | Contradicts named exports for single-export modules                  |
-| `import/exports-last: off`                        | Global           | Reference explicitly permits exports alongside declarations          |
-| `typescript/explicit-function-return-type: off`   | Global           | Reference disables mandatory return types                            |
-| `typescript/explicit-module-boundary-types: off`  | Global           | Preserve inferred exported return types                              |
-| `no-ternary: off`                                 | Global           | Reference explicitly permits ternaries                               |
-| `sort-imports: off`                               | Global           | Oxfmt owns sorting; ESLint alphabetic declaration ordering conflicts |
-| `import/no-default-export: off`                   | `**/*.config.ts` | Framework config default export, matching reference                  |
-| `typescript/prefer-readonly-parameter-types: off` | `src/counter.ts` | HTML button is a mutable DOM object; counter updates its text        |
+| Setting                                           | Scope            | Reason                                                                                           |
+| ------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------ |
+| `import/no-named-export: off`                     | Global           | Contradicts reference named exports                                                              |
+| `import/prefer-default-export: off`               | Global           | Contradicts named exports for single-export modules                                              |
+| `import/exports-last: off`                        | Global           | Reference explicitly permits exports alongside declarations                                      |
+| `typescript/explicit-function-return-type: off`   | Global           | Reference disables mandatory return types                                                        |
+| `typescript/explicit-module-boundary-types: off`  | Global           | Preserve inferred exported return types                                                          |
+| `no-ternary: off`                                 | Global           | Reference explicitly permits ternaries                                                           |
+| `oxc/no-rest-spread-properties: off`              | `vite.config.ts` | Declarative rule tables use spread; `Object.assign` conflicts with native `prefer-object-spread` |
+| `sort-imports: off`                               | Global           | Oxfmt owns sorting; ESLint alphabetic declaration ordering conflicts                             |
+| `import/no-default-export: off`                   | `**/*.config.ts` | Framework config default export, matching reference                                              |
+| `typescript/prefer-readonly-parameter-types: off` | `src/counter.ts` | HTML button is a mutable DOM object; counter updates its text                                    |
 
 Configured restrictions (not disabled rules): `func-style` requires declarations;
 arrow callbacks remain valid. `one-var: never` keeps declarations separate across
@@ -107,7 +108,8 @@ replace those checks. Biome assists are not lint rules; Oxfmt handles formatting
 and import ordering, but does not promise every Biome assist transformation.
 
 No exact native equivalent is established here for every Biome naming convention,
-all secret detection heuristics (the reference disables `noSecrets`). The existing
+all secret detection heuristics. The reference disables `noSecrets`; the subsequently
+requested Sonar safety extension enables its available secret checks. The existing
 compiler `erasableSyntaxOnly` rejects TypeScript enums and parameter properties. The original six Grit checks are reviewed separately, with no custom
 ports introduced. Framework and architecture checks require the corresponding
 application/test layout before meaningful configuration.
@@ -130,3 +132,7 @@ value exported as default. Anonymous default object exports remain restricted.
 
 Plugin maintenance, compatibility, original Grit coverage, and adoption phases are
 recorded in [the plugin review](./lint-plugin-review.md).
+
+The installed Regexp, No Unsanitized, and SonarJS rules and all individual JS
+exceptions are documented in [the plugin review](./lint-plugin-review.md) and the
+commented explicit rule tables under `lint/`. These augment the original migration.

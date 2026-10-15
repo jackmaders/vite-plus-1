@@ -1,4 +1,7 @@
 import { defineConfig } from "vite-plus";
+import { sonarExceptions } from "./lint/sonar-exceptions.ts";
+import { sonarRules } from "./lint/sonar-rules.ts";
+import { sonarUnavailable } from "./lint/sonar-unavailable.ts";
 
 export default defineConfig({
   fmt: {},
@@ -17,6 +20,7 @@ export default defineConfig({
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
       "eslint-plugin-regexp",
       "eslint-plugin-no-unsanitized",
+      "eslint-plugin-sonarjs",
     ],
     options: {
       denyWarnings: true,
@@ -27,13 +31,20 @@ export default defineConfig({
     overrides: [
       {
         env: { browser: false, node: true },
-        files: ["**/*.config.ts", "scripts/**/*.ts"],
+        files: ["**/*.config.ts", "lint/**/*.ts", "scripts/**/*.ts"],
       },
       {
         files: ["**/*.config.ts"],
         rules: {
           // Vite configuration uses a default export, matching the reference.
           "import/no-default-export": "off",
+        },
+      },
+      {
+        files: ["vite.config.ts"],
+        rules: {
+          // Declarative rule tables use spread; Object.assign conflicts with prefer-object-spread.
+          "oxc/no-rest-spread-properties": "off",
         },
       },
       {
@@ -46,6 +57,9 @@ export default defineConfig({
     ],
     plugins: ["typescript", "unicorn", "oxc", "import", "promise", "jsdoc", "node"],
     rules: {
+      ...sonarRules,
+      ...sonarExceptions,
+      ...sonarUnavailable,
       "func-style": ["error", "declaration"],
       // The reference permits exports next to declarations instead of requiring a footer.
       "import/exports-last": "off",
