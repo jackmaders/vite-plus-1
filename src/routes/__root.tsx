@@ -28,7 +28,6 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
-// oxlint-disable-next-line typescript/prefer-readonly-parameter-types -- ReactNode includes framework-owned mutable types; component props remain readonly.
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">

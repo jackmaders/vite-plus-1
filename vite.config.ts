@@ -76,6 +76,7 @@ export default defineConfig({
       "sort-imports": "off",
       "typescript/explicit-function-return-type": "off",
       "typescript/explicit-module-boundary-types": "off",
+      "typescript/prefer-readonly-parameter-types": "off",
       "vite-plus/prefer-vite-plus-imports": "error",
     },
     settings: {
