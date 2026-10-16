@@ -136,7 +136,7 @@ export default defineConfig({
       exclude: [...GENERATED_FILES, "**/__tests__/**", "src/routes/**/*.tsx"],
       include: ["src/**/*.{ts,tsx,js,jsx}"],
       provider: "v8",
-      reporter: ["text-summary"],
+      reporter: ["text-summary", "json"],
       thresholds: { branches: 100, functions: 100, lines: 100, statements: 100 },
     },
     environment: "happy-dom",
