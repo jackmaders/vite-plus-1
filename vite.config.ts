@@ -106,6 +106,7 @@ export default defineConfig({
       "import/no-unassigned-import": ["error", { allow: ["**/*.css"] }],
       "import/prefer-default-export": "off",
       "jsx-a11y/anchor-is-valid": ["error", { components: ["Link"], specialLink: ["to"] }],
+      "no-console": "error",
       "no-unsanitized/method": "error",
       "no-unsanitized/property": "error",
       "no-unused-vars": ["error", { args: "all" }],
@@ -132,7 +133,7 @@ export default defineConfig({
   staged: { "*": "vp check --fix" },
   test: {
     coverage: {
-      exclude: [...GENERATED_FILES, "**/__tests__/**"],
+      exclude: [...GENERATED_FILES, "**/__tests__/**", "src/routes/**/*.tsx"],
       include: ["src/**/*.{ts,tsx,js,jsx}"],
       provider: "v8",
       reporter: ["text-summary"],

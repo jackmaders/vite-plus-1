@@ -27,6 +27,6 @@ describe("application", () => {
     const wrapper = await createRouterWrapper("/missing");
     render(<Matches />, { container: document, wrapper });
     await expect(screen.findByText("Not Found")).resolves.toBeVisible();
-    expect(screen.queryByRole("main")).not.toBeInTheDocument();
+    expect(screen.getByRole("main")).toBeVisible();
   });
 });
