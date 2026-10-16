@@ -1,11 +1,8 @@
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import process from "node:process";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
 const GENERATED_FILES = ["src/routeTree.gen.ts"];
-
-// Colocate unit/component specs with features; keep future e2e suites outside this scope.
 const TEST_FILES = ["src/**/__tests__/**/*.spec.{ts,tsx}"];
 
 export default defineConfig({
@@ -23,8 +20,6 @@ export default defineConfig({
     env: { browser: true, node: false },
     ignorePatterns: GENERATED_FILES,
     jsPlugins: [
-      // Testing Library 7.16.2 runs through Oxlint 1.88.0 JS support; no unsupported rules observed.
-      // Native Vitest owns test structure; this plugin owns queries, rendering and interactions.
       { name: "testing-library", specifier: "eslint-plugin-testing-library" },
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
       { name: "no-unsanitized", specifier: "eslint-plugin-no-unsanitized" },
@@ -37,18 +32,10 @@ export default defineConfig({
       typeCheck: true,
     },
     overrides: [
-      // Router loading and user interactions must be awaited in tests and their wrappers.
-      { files: [...TEST_FILES, "src/testing/**"], rules: { "oxc/no-async-await": "off" } },
-      // Register the entire jest-dom matcher namespace once in runner setup.
-      { files: ["tests/vitest/setup.ts"], rules: { "import/no-namespace": "off" } },
       {
         files: TEST_FILES,
-        // Existing error-level categories enable native Vitest rules only for unit/component specs.
         plugins: ["vitest"],
         rules: {
-          // Explicitly inventory all 29 plugin rules; all apply at error except the conflict below.
-          // Loading and negative probes verified focused-test and DOM-node-access diagnostics.
-          // Lint cannot validate browser/CSS/SSR behavior or reference-specific Grit conventions.
           "testing-library/await-async-events": "error",
           "testing-library/await-async-queries": "error",
           "testing-library/await-async-utils": "error",
@@ -70,7 +57,6 @@ export default defineConfig({
           "testing-library/no-wait-for-snapshot": "error",
           "testing-library/prefer-explicit-assert": "error",
           "testing-library/prefer-find-by": "error",
-          // Conflicts with prefer-explicit-assert; assert the intended visible/present behavior.
           "testing-library/prefer-implicit-assert": "off",
           "testing-library/prefer-presence-queries": "error",
           "testing-library/prefer-query-by-disappearance": "error",
@@ -79,28 +65,18 @@ export default defineConfig({
           "testing-library/prefer-user-event": "error",
           "testing-library/prefer-user-event-setup": "error",
           "testing-library/render-result-naming-convention": "error",
-          // Match the reference project’s colocated .spec convention.
           "vitest/consistent-test-filename": ["error", { pattern: ".*\\.spec\\.[tj]sx?$" }],
-          // APIs must be explicitly imported from vite-plus/test; Vitest globals stay disabled.
           "vitest/no-importing-vitest-globals": "off",
-          // Awaited assertions already reject; counts add no protection for these unconditional tests.
           "vitest/prefer-expect-assertions": "off",
-          // Oxlint recognizes canonical Vitest imports but misidentifies vite-plus/test imports.
-          // No-undef/type checking require declarations; Vite+ enforces the import package.
-          "vitest/prefer-importing-vitest-globals": "off",
-          // Vitest’s default timeout bounds every test without repeated per-test literals.
+          "vitest/prefer-importing-vitest-globals": "error",
           "vitest/require-test-timeout": "off",
         },
       },
       {
         env: { browser: false, node: true },
         files: ["**/*.config.ts"],
-      },
-      {
-        files: ["**/*.config.ts"],
         rules: {
           "import/no-default-export": "off",
-          // Vite configuration reads node:process to distinguish unit runs from app builds.
           "import/no-nodejs-modules": "off",
         },
       },
@@ -135,6 +111,7 @@ export default defineConfig({
       "no-unused-vars": ["error", { args: "all" }],
       "no-use-before-define": ["error", { functions: false }],
       "one-var": ["error", "never"],
+      "oxc/no-async-await": "off",
       "react/hooks": "off",
       "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
       "react/jsx-no-literals": "off",
@@ -150,41 +127,20 @@ export default defineConfig({
       react: { linkComponents: [{ attribute: "to", name: "Link" }] },
     },
   },
-  plugins:
-    lazyPlugins(() => {
-      // Keep React transforms in tests, but avoid Start’s build/SSR transforms and generated state.
-      if (process.env["VITEST"] === "true") {
-        return [viteReact()];
-      }
-      // Colocated specs are test modules, so exclude them from file-based route generation.
-      return [tanstackStart({ router: { routeFileIgnorePattern: "__tests__" } }), viteReact()];
-    }) ?? [],
+  plugins: lazyPlugins(() => [tanstackStart(), viteReact()]) ?? [],
   resolve: { tsconfigPaths: true },
-  // Keep vp test / vp test watch as normal interfaces; coverage runs once and never replays a cache.
-  run: { tasks: { "test:coverage": { cache: false, command: "vp test run --coverage" } } },
-  staged: {
-    "*": "vp check --fix",
-  },
+  staged: { "*": "vp check --fix" },
   test: {
     coverage: {
-      // Exclude only generated code, types, specs and test utilities; routes/components stay covered.
-      // Router/root entries are authored and covered; client/server defaults come from dependencies.
-      exclude: [...GENERATED_FILES, "**/*.d.ts", "**/__tests__/**", "src/testing/**"],
-      // Explicit inclusion measures unimported application files, so new untested modules fail.
+      exclude: [...GENERATED_FILES, "**/__tests__/**"],
       include: ["src/**/*.{ts,tsx,js,jsx}"],
-      // @vitest/coverage-v8 is pinned to bundled Vitest 5.0.4; align on upgrades via vp toolchain.
       provider: "v8",
-      // Console feedback plus browsable HTML, LCOV integrations and machine-readable totals for CI.
-      reporter: ["text", "html", "lcov", "json-summary"],
-      // Future changes must preserve every metric; an unimported branch probe verified exit 1.
+      reporter: ["text-summary"],
       thresholds: { branches: 100, functions: 100, lines: 100, statements: 100 },
     },
-    // DOM component testing without adding a browser/e2e runner.
     environment: "happy-dom",
     include: TEST_FILES,
-    // Restore spies between tests to prevent mutable mock state leaking across cases.
     restoreMocks: true,
-    // Runner-wide matchers and explicit cleanup run before each file; reserve tests/ for future e2e.
     setupFiles: ["./tests/vitest/setup.ts"],
   },
 });
