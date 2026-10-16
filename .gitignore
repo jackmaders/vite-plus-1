@@ -33,3 +33,6 @@ dist-ssr
 
 # TanStack Start temporary build state
 .tanstack
+
+# Unit test coverage reports
+coverage

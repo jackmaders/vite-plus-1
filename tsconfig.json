@@ -30,5 +30,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "*.config.ts", "scripts/**/*.ts"]
+  "include": ["src", "tests", "*.config.ts", "scripts"]
 }

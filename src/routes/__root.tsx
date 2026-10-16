@@ -1,7 +1,7 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import { createRootRoute } from "@tanstack/react-router";
 
-import type { ReactNode } from "react";
-import { Navigation } from "@/components/navigation";
+import { NotFound } from "@/components/not-found";
+import { RootDocument } from "@/components/root-document";
 import appCss from "@/styles.css?url";
 
 export const Route = createRootRoute({
@@ -25,21 +25,6 @@ export const Route = createRootRoute({
       },
     ],
   }),
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 });
-
-function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <Navigation />
-        {children}
-
-        <Scripts />
-      </body>
-    </html>
-  );
-}
